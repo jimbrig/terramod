@@ -1,0 +1,7 @@
+*
+!.gitignore
+!*.example
+!Brewfile
+!.tflint.hcl
+!tfmigrator.yaml
+!dev.tfvars
