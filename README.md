@@ -2,7 +2,7 @@
 
 > Sandbox for developing terraform modules and testing terraform related tools. Terraform is 💲. 
 
-See [docs](docs/).
+See [scripts](scripts/).
 
 ## Development
 
