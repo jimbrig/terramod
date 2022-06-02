@@ -13,20 +13,20 @@ provider "azurerm" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "main" {
-  name     = var.prefix-resources
+  name     = "${var.prefix}-resources"
   location = var.location
 }
 
 resource "azurerm_service_plan" "main" {
-  name                = var.prefix-service-plan
-  location            = var.location
+  name                = "${var.prefix}-service-plan"
+  location            = "${var.location}"
   resource_group_name = azurerm_resource_group.main.name
   os_type             = "Linux"
   sku_name            = "S1"
 }
 
 resource "azurerm_linux_web_app" "main" {
-  name                = var.prefix-appservice
+  name                = "${var.prefix}-appservice"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   service_plan_id = azurerm_service_plan.main.id
@@ -57,7 +57,7 @@ resource "azurerm_mssql_server" "terraform-sqlserver" {
 }
 
 resource "azurerm_mssql_database" "terraform-sqldatabase" {
-  name                = var.prefix-db
+  name                = "${var.prefix}-db"
   server_id           = azurerm_mssql_server.terraform-sqlserver.id
   collation           = "SQL_Latin1_General_CP1_CI_AS"
   license_type        = "LicenseIncluded"
@@ -71,38 +71,38 @@ resource "azurerm_mssql_database" "terraform-sqldatabase" {
   }
 }
 
-resource "azurerm_key_vault" "main" {
-  name = var.prefix-keyvault
-  location = azurerm_resource_group.main.location
-  resource_group_name          = azurerm_resource_group.main.name
-  enabled_for_disk_encryption = true
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
+# resource "azurerm_key_vault" "main" {
+#   name = "${var.prefix}-keyvault"
+#   location = azurerm_resource_group.main.location
+#   resource_group_name          = azurerm_resource_group.main.name
+#   enabled_for_disk_encryption = true
+#   tenant_id                   = data.azurerm_client_config.current.tenant_id
+#   soft_delete_retention_days  = 7
+#   purge_protection_enabled    = false
 
-  sku_name = "standard"
+#   sku_name = "standard"
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+#   access_policy {
+#     tenant_id = data.azurerm_client_config.current.tenant_id
+#     object_id = data.azurerm_client_config.current.object_id
 
-    key_permissions = [
-      "Get",
-    ]
+#     key_permissions = [
+#       "Get",
+#     ]
 
-    secret_permissions = [
-      "Get",
-    ]
+#     secret_permissions = [
+#       "Get",
+#     ]
 
-    storage_permissions = [
-      "Get",
-    ]
-  }
-}
+#     storage_permissions = [
+#       "Get",
+#     ]
+#   }
+# }
 
 
 resource "azurerm_container_registry" "main" {
-  name                  = var.prefix-acr
+  name                  = "${var.prefix}acr"
   admin_enabled         = true
   sku                   = "Premium"
   resource_group_name   = azurerm_resource_group.main.name
